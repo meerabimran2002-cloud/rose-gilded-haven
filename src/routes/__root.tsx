@@ -77,9 +77,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Roselle — Modern Luxury Dining in Islamabad" },
-      { name: "description", content: "Roselle is a modern luxury restaurant in Islamabad, serving refined cuisine in an elegant rose-gold setting. Reserve your table today." },
-      { property: "og:title", content: "Roselle — Modern Luxury Dining in Islamabad" },
+      { title: "Golden Plate — Luxury Fine Dining in Islamabad" },
+      { name: "description", content: "Golden Plate is a modern luxury restaurant in Islamabad. Signature dishes, master chefs, and unforgettable evenings." },
+      { property: "og:title", content: "Golden Plate — Luxury Fine Dining in Islamabad" },
       { property: "og:description", content: "A modern luxury restaurant in Islamabad. Refined cuisine, elegant ambience, unforgettable evenings." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

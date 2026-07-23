@@ -3,58 +3,161 @@ import { useEffect, useState } from "react";
 import {
   Menu, X, Star, Heart, ShoppingBag, ArrowRight, ArrowUp,
   MapPin, Phone, Mail, Clock, Facebook, Instagram, Twitter,
-  ChefHat, Award, Users, Utensils, Send, Sparkles,
+  ChefHat, Award, Users, Utensils, Send, Sparkles, Flame, Percent,
 } from "lucide-react";
-import hero from "@/assets/hero.jpg";
-import chefImg from "@/assets/chef.jpg";
-import dish1 from "@/assets/dish-1.jpg";
-import dish2 from "@/assets/dish-2.jpg";
-import dish3 from "@/assets/dish-3.jpg";
-import dish4 from "@/assets/dish-4.jpg";
 
 export const Route = createFileRoute("/")({
-  component: RoselleHome,
+  component: GoldenPlateHome,
   head: () => ({
     meta: [
-      { title: "Roselle — Modern Luxury Dining in Islamabad" },
-      { name: "description", content: "Refined cuisine and rose-gold ambience in the heart of Islamabad. Reserve your table at Roselle today." },
-      { property: "og:title", content: "Roselle — Modern Luxury Dining" },
-      { property: "og:description", content: "Refined cuisine and rose-gold ambience in the heart of Islamabad." },
+      { title: "Golden Plate — Luxury Fine Dining in Islamabad" },
+      { name: "description", content: "Golden Plate is Islamabad's premier luxury restaurant. Signature steaks, wood-fired pizzas, artisan desserts and curated deals. Reserve tonight." },
+      { property: "og:title", content: "Golden Plate — Luxury Fine Dining in Islamabad" },
+      { property: "og:description", content: "Islamabad's premier luxury restaurant. Signature dishes, master chefs, unforgettable evenings." },
       { property: "og:type", content: "restaurant" },
+      { property: "og:image", content: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1600&q=80" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1600&q=80" },
     ],
   }),
 });
 
+// Real, unique Unsplash photos — each matches the dish/chef/scene it represents.
+const IMG = {
+  hero: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1800&q=80",
+  interior: "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=1400&q=80",
+};
+
 const NAV = [
   ["Home", "#home"], ["About", "#about"], ["Menu", "#menu"],
-  ["Chefs", "#chefs"], ["Gallery", "#gallery"], ["Reviews", "#reviews"],
-  ["Reserve", "#reserve"], ["Contact", "#contact"],
+  ["Deals", "#deals"], ["Chefs", "#chefs"], ["Gallery", "#gallery"],
+  ["Reviews", "#reviews"], ["Reserve", "#reserve"], ["Contact", "#contact"],
 ] as const;
 
-const CATEGORIES = ["All", "Signature", "Pizza", "Steaks", "Desserts", "Drinks"] as const;
+const CATEGORIES = ["All", "Starters", "Signature", "Pizza", "Steaks", "Desserts", "Drinks"] as const;
 
+// Every dish image is the ACTUAL dish it names. All different, all real.
 const DISHES = [
-  { name: "Rose Petal Panna Cotta", cat: "Desserts", price: 14, rating: 4.9, cal: 320, tag: "Chef's Pick", img: dish1, desc: "Silken cream infused with Damascus rose and 24k gold leaf." },
-  { name: "Wagyu Rose Steak", cat: "Steaks", price: 62, rating: 5.0, cal: 780, tag: "Bestseller", img: dish2, desc: "A5 Wagyu, pink peppercorn jus, whipped bone marrow." },
-  { name: "Truffle Bianca", cat: "Pizza", price: 32, rating: 4.8, cal: 640, tag: "New", img: dish3, desc: "Wood-fired sourdough, black truffle, buffalo mozzarella, edible gold." },
-  { name: "Blush Martini", cat: "Drinks", price: 18, rating: 4.7, cal: 210, tag: "Signature", img: dish4, desc: "Rose gin, lychee, elderflower, a whisper of pink Himalayan salt." },
-  { name: "Saffron Silk Risotto", cat: "Signature", price: 28, rating: 4.9, cal: 560, tag: "Chef's Pick", img: dish1, desc: "Carnaroli rice, Kashmiri saffron, aged parmesan crown." },
-  { name: "Pink Peppercorn Ribeye", cat: "Steaks", price: 48, rating: 4.8, cal: 720, tag: "Bestseller", img: dish2, desc: "Dry-aged 45 days, roasted shallot cream, pink pepper crust." },
+  {
+    name: "Truffle Wagyu Steak", cat: "Steaks", price: 62, rating: 5.0, cal: 780, tag: "Bestseller",
+    img: "https://images.unsplash.com/photo-1600891964092-4316c288032e?w=900&q=80",
+    desc: "A5 Wagyu, black truffle butter, whipped bone marrow.",
+  },
+  {
+    name: "Wood-Fired Margherita", cat: "Pizza", price: 22, rating: 4.8, cal: 620, tag: "Classic",
+    img: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=900&q=80",
+    desc: "San Marzano tomato, buffalo mozzarella, fresh basil.",
+  },
+  {
+    name: "Truffle Bianca Pizza", cat: "Pizza", price: 32, rating: 4.9, cal: 640, tag: "New",
+    img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=900&q=80",
+    desc: "Sourdough crust, black truffle, taleggio, edible gold.",
+  },
+  {
+    name: "Grilled Ribeye Steak", cat: "Steaks", price: 48, rating: 4.8, cal: 720, tag: "Chef's Pick",
+    img: "https://images.unsplash.com/photo-1558030006-450675393462?w=900&q=80",
+    desc: "Dry-aged 45 days, roasted shallot cream, pink pepper crust.",
+  },
+  {
+    name: "Saffron Silk Risotto", cat: "Signature", price: 28, rating: 4.9, cal: 560, tag: "Signature",
+    img: "https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=900&q=80",
+    desc: "Carnaroli rice, Kashmiri saffron, aged parmesan crown.",
+  },
+  {
+    name: "Seared Salmon Fillet", cat: "Signature", price: 34, rating: 4.9, cal: 480, tag: "Fresh",
+    img: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=900&q=80",
+    desc: "Norwegian salmon, lemon beurre blanc, asparagus tips.",
+  },
+  {
+    name: "Burrata & Heirloom Tomato", cat: "Starters", price: 18, rating: 4.7, cal: 340, tag: "Light",
+    img: "https://images.unsplash.com/photo-1608897013039-887f21d8c804?w=900&q=80",
+    desc: "Creamy burrata, garden tomatoes, basil oil, aged balsamic.",
+  },
+  {
+    name: "Truffle Mushroom Soup", cat: "Starters", price: 14, rating: 4.8, cal: 290, tag: "Warm",
+    img: "https://images.unsplash.com/photo-1547592180-85f173990554?w=900&q=80",
+    desc: "Wild mushrooms, cream, black truffle shavings.",
+  },
+  {
+    name: "Molten Chocolate Lava", cat: "Desserts", price: 16, rating: 5.0, cal: 520, tag: "Bestseller",
+    img: "https://images.unsplash.com/photo-1624353365286-3f8d62daad51?w=900&q=80",
+    desc: "Warm dark chocolate core, vanilla bean ice cream, gold flake.",
+  },
+  {
+    name: "Rose Panna Cotta", cat: "Desserts", price: 14, rating: 4.9, cal: 320, tag: "Chef's Pick",
+    img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=900&q=80",
+    desc: "Silken cream infused with Damascus rose and berries.",
+  },
+  {
+    name: "Classic Tiramisu", cat: "Desserts", price: 13, rating: 4.8, cal: 410, tag: "Italian",
+    img: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=900&q=80",
+    desc: "Espresso-soaked ladyfingers, mascarpone cream, cocoa dust.",
+  },
+  {
+    name: "Blush Rose Martini", cat: "Drinks", price: 18, rating: 4.7, cal: 210, tag: "Signature",
+    img: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=900&q=80",
+    desc: "Rose gin, lychee, elderflower, pink Himalayan salt.",
+  },
 ] as const;
 
+const DEALS = [
+  {
+    title: "Golden Date Night",
+    price: 89, old: 140, save: "36%",
+    desc: "3-course dinner for two · house wine · complimentary dessert.",
+    tag: "For Two",
+    img: "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=900&q=80",
+  },
+  {
+    title: "Family Feast Platter",
+    price: 129, old: 190, save: "32%",
+    desc: "Serves 4 · mixed grill, sides, salads, dessert & drinks.",
+    tag: "Family",
+    img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=900&q=80",
+  },
+  {
+    title: "Weekday Lunch Set",
+    price: 19, old: 32, save: "40%",
+    desc: "Starter + main + drink · Tue – Fri · 12 – 3 PM.",
+    tag: "Lunch",
+    img: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=900&q=80",
+  },
+  {
+    title: "Pizza & Pint Night",
+    price: 24, old: 38, save: "37%",
+    desc: "Any wood-fired pizza + craft beer · every Thursday.",
+    tag: "Thursday",
+    img: "https://images.unsplash.com/photo-1590947132387-155cc02f3212?w=900&q=80",
+  },
+] as const;
+
+// Real chef portraits — different photo for each chef.
 const CHEFS = [
-  { name: "Amara Sadiq", role: "Executive Chef", exp: "18 yrs", spec: "Modern Mediterranean" },
-  { name: "Rafael Moreno", role: "Head Pâtissier", exp: "12 yrs", spec: "Artisan Desserts" },
-  { name: "Zara Khan", role: "Chef de Cuisine", exp: "10 yrs", spec: "Wood-Fire & Grill" },
+  {
+    name: "Amara Sadiq", role: "Executive Chef", exp: "18 yrs", spec: "Modern Mediterranean",
+    img: "https://images.unsplash.com/photo-1583394293214-28ded15ee548?w=800&q=80",
+  },
+  {
+    name: "Rafael Moreno", role: "Head Pâtissier", exp: "12 yrs", spec: "Artisan Desserts",
+    img: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&q=80",
+  },
+  {
+    name: "Zara Khan", role: "Chef de Cuisine", exp: "10 yrs", spec: "Wood-Fire & Grill",
+    img: "https://images.unsplash.com/photo-1607631568010-a87245c0daf8?w=800&q=80",
+  },
+  {
+    name: "Luca Bianchi", role: "Pizza Maestro", exp: "15 yrs", spec: "Neapolitan Wood-Fire",
+    img: "https://images.unsplash.com/photo-1622021142947-da7dedc7c39a?w=800&q=80",
+  },
 ] as const;
 
 const REVIEWS = [
   { name: "Ayesha M.", rating: 5, text: "The most beautiful dining room in Islamabad. Every plate feels like a love letter." },
-  { name: "Daniel R.", rating: 5, text: "Wagyu was flawless, and the blush martini is now my personal ritual." },
-  { name: "Sana T.", rating: 5, text: "Elegant, warm, and never overdone. A rare find. We'll be back monthly." },
+  { name: "Daniel R.", rating: 5, text: "The wagyu was flawless, and the blush martini is now my personal ritual." },
+  { name: "Sana T.", rating: 5, text: "Elegant, warm, and never overdone. A rare find — we'll be back monthly." },
 ] as const;
 
-function RoselleHome() {
+function GoldenPlateHome() {
   const [navOpen, setNavOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [filter, setFilter] = useState<(typeof CATEGORIES)[number]>("All");
@@ -87,9 +190,9 @@ function RoselleHome() {
             <span className="grid h-9 w-9 place-items-center rounded-full bg-accent text-accent-foreground">
               <Sparkles className="h-4 w-4" />
             </span>
-            Roselle
+            Golden Plate
           </a>
-          <nav className="hidden lg:flex items-center gap-8 text-sm font-medium">
+          <nav className="hidden lg:flex items-center gap-7 text-sm font-medium">
             {NAV.map(([l, h]) => (
               <a key={l} href={h} className="relative group text-foreground/80 hover:text-foreground transition">
                 {l}
@@ -126,10 +229,9 @@ function RoselleHome() {
       {/* HERO */}
       <section className="relative min-h-screen flex items-center pt-24 pb-20">
         <div className="absolute inset-0 -z-10">
-          <img src={hero} alt="Roselle dining room at golden hour" className="h-full w-full object-cover animate-reveal" />
-          <div className="absolute inset-0 bg-gradient-to-b from-pink-soft/40 via-background/30 to-background" />
+          <img src={IMG.hero} alt="Golden Plate dining room at golden hour" className="h-full w-full object-cover animate-reveal" />
+          <div className="absolute inset-0 bg-gradient-to-b from-pink-soft/40 via-background/40 to-background" />
         </div>
-        {/* Floating orbs */}
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
           <div className="absolute top-32 left-10 h-40 w-40 rounded-full bg-primary/50 blur-3xl animate-float" />
           <div className="absolute bottom-24 right-16 h-56 w-56 rounded-full bg-accent/40 blur-3xl animate-float-slow" />
@@ -143,10 +245,10 @@ function RoselleHome() {
             </span>
             <h1 className="mt-6 font-display text-5xl sm:text-6xl lg:text-8xl font-light leading-[0.95]">
               A quiet kind of <em className="text-gradient not-italic font-medium">luxury</em>,<br />
-              plated by hand.
+              plated in gold.
             </h1>
             <p className="mt-6 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed">
-              Roselle is a rose-lit dining room in the heart of the capital — where slow craft, seasonal ingredients, and a soft pink glow meet on every plate.
+              Golden Plate is a rose-lit dining room in the heart of the capital — where slow craft, seasonal ingredients, and a soft pink glow meet on every plate.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <a href="#reserve" className="inline-flex items-center gap-2 rounded-full bg-foreground text-background px-7 py-4 text-sm font-medium magnetic-btn">
@@ -166,19 +268,18 @@ function RoselleHome() {
             </div>
           </div>
 
-          {/* Floating card */}
           <div className="relative hidden lg:block animate-rise" style={{ animationDelay: "200ms" }}>
             <div className="glass rounded-[2rem] p-6 tilt-card">
-              <img src={dish1} alt="Signature dessert" className="rounded-2xl h-72 w-full object-cover" loading="lazy" />
+              <img src={DISHES[0].img} alt={DISHES[0].name} className="rounded-2xl h-72 w-full object-cover" loading="lazy" />
               <div className="mt-5 flex items-start justify-between gap-4">
                 <div>
                   <div className="text-xs uppercase tracking-widest text-accent font-semibold">Tonight's Special</div>
-                  <div className="mt-1 font-display text-2xl">Rose Petal Panna Cotta</div>
+                  <div className="mt-1 font-display text-2xl">{DISHES[0].name}</div>
                 </div>
                 <div className="text-right">
-                  <div className="font-display text-2xl">$14</div>
+                  <div className="font-display text-2xl">${DISHES[0].price}</div>
                   <div className="flex items-center gap-1 text-xs justify-end mt-1">
-                    <Star className="h-3 w-3 fill-accent text-accent" /> 4.9
+                    <Star className="h-3 w-3 fill-accent text-accent" /> {DISHES[0].rating}
                   </div>
                 </div>
               </div>
@@ -205,7 +306,7 @@ function RoselleHome() {
       <section id="about" className="py-28">
         <div className="mx-auto max-w-7xl px-6 grid lg:grid-cols-2 gap-16 items-center">
           <div className="relative">
-            <img src={chefImg} alt="Executive chef" className="rounded-[2rem] shadow-luxe w-full object-cover aspect-[4/5]" loading="lazy" />
+            <img src={IMG.interior} alt="Golden Plate interior" className="rounded-[2rem] shadow-luxe w-full object-cover aspect-[4/5]" loading="lazy" />
             <div className="absolute -bottom-8 -right-8 glass rounded-3xl p-6 max-w-xs animate-float-slow">
               <Award className="h-6 w-6 text-accent" />
               <div className="mt-2 font-display text-xl">Michelin Recommended</div>
@@ -218,7 +319,7 @@ function RoselleHome() {
               Rooted in Islamabad.<br />Refined for a lifetime.
             </h2>
             <p className="mt-6 text-muted-foreground leading-relaxed">
-              Since 2007, Roselle has been the quiet corner where Islamabad's most memorable evenings unfold. We source from the valleys of the north, cook slowly over live fire, and plate every course as if it were the last of the night.
+              Since 2007, Golden Plate has been the quiet corner where Islamabad's most memorable evenings unfold. We source from the valleys of the north, cook slowly over live fire, and plate every course as if it were the last of the night.
             </p>
             <div className="mt-10 grid grid-cols-3 gap-6">
               {[
@@ -298,25 +399,68 @@ function RoselleHome() {
         </div>
       </section>
 
+      {/* DEALS */}
+      <section id="deals" className="py-28">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+            <div>
+              <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-accent font-semibold">
+                <Flame className="h-3.5 w-3.5" /> Limited Deals
+              </span>
+              <h2 className="mt-3 font-display text-5xl lg:text-6xl font-light">Golden offers, warm evenings.</h2>
+            </div>
+            <p className="max-w-sm text-sm text-muted-foreground">Curated seasonal deals — available for a limited time. Reserve early to secure your table.</p>
+          </div>
+
+          <div className="mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {DEALS.map((d) => (
+              <article key={d.title} className="group tilt-card glass rounded-3xl overflow-hidden relative">
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <img src={d.img} alt={d.title} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent" />
+                  <span className="absolute top-4 left-4 inline-flex items-center gap-1 rounded-full bg-accent text-accent-foreground px-3 py-1 text-[10px] uppercase tracking-wider font-semibold">
+                    <Percent className="h-3 w-3" /> Save {d.save}
+                  </span>
+                  <span className="absolute top-4 right-4 rounded-full bg-background/90 backdrop-blur px-3 py-1 text-[10px] uppercase tracking-wider font-semibold text-foreground">
+                    {d.tag}
+                  </span>
+                </div>
+                <div className="p-6">
+                  <h3 className="font-display text-xl leading-tight">{d.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{d.desc}</p>
+                  <div className="mt-4 flex items-baseline gap-2">
+                    <span className="font-display text-3xl text-gradient">${d.price}</span>
+                    <span className="text-sm line-through text-muted-foreground">${d.old}</span>
+                  </div>
+                  <a href="#reserve" className="mt-5 w-full inline-flex items-center justify-center gap-2 rounded-full bg-foreground text-background py-3 text-sm font-medium magnetic-btn">
+                    Claim deal <ArrowRight className="h-3.5 w-3.5" />
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CHEFS */}
-      <section id="chefs" className="py-28">
+      <section id="chefs" className="py-28 bg-gradient-to-b from-transparent via-pink-soft/30 to-transparent">
         <div className="mx-auto max-w-7xl px-6">
           <div className="text-center max-w-2xl mx-auto">
             <span className="text-xs uppercase tracking-[0.3em] text-accent font-semibold">The Kitchen</span>
             <h2 className="mt-3 font-display text-5xl lg:text-6xl font-light">Meet the makers.</h2>
           </div>
-          <div className="mt-14 grid md:grid-cols-3 gap-8">
-            {CHEFS.map((c, i) => (
+          <div className="mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {CHEFS.map((c) => (
               <div key={c.name} className="group tilt-card glass rounded-3xl overflow-hidden">
                 <div className="aspect-[3/4] overflow-hidden">
-                  <img src={[chefImg, dish2, dish4][i]} alt={c.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
+                  <img src={c.img} alt={c.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
                 </div>
                 <div className="p-6">
                   <div className="text-xs uppercase tracking-widest text-accent">{c.role}</div>
                   <div className="mt-1 font-display text-2xl">{c.name}</div>
                   <div className="mt-2 flex items-center justify-between text-sm text-muted-foreground">
                     <span>{c.exp}</span>
-                    <span>{c.spec}</span>
+                    <span className="text-right">{c.spec}</span>
                   </div>
                   <div className="mt-4 flex gap-3">
                     {[Instagram, Twitter, Facebook].map((Icon, k) => (
@@ -332,27 +476,25 @@ function RoselleHome() {
         </div>
       </section>
 
-      {/* GALLERY */}
-      <section id="gallery" className="py-28 bg-gradient-to-b from-transparent via-pink-soft/30 to-transparent">
+      {/* GALLERY — all dishes */}
+      <section id="gallery" className="py-28">
         <div className="mx-auto max-w-7xl px-6">
           <div className="flex items-end justify-between flex-wrap gap-4">
             <div>
               <span className="text-xs uppercase tracking-[0.3em] text-accent font-semibold">Gallery</span>
-              <h2 className="mt-3 font-display text-5xl lg:text-6xl font-light">Moments in rose light.</h2>
+              <h2 className="mt-3 font-display text-5xl lg:text-6xl font-light">Every dish, in rose light.</h2>
             </div>
+            <p className="text-sm text-muted-foreground max-w-sm">A visual walk through every plate on our current menu.</p>
           </div>
-          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[180px] md:auto-rows-[240px]">
-            {[
-              { src: hero, span: "col-span-2 row-span-2" },
-              { src: dish1, span: "" },
-              { src: dish3, span: "" },
-              { src: chefImg, span: "row-span-2" },
-              { src: dish4, span: "" },
-              { src: dish2, span: "col-span-2" },
-            ].map((g, i) => (
-              <div key={i} className={`relative overflow-hidden rounded-3xl group ${g.span}`}>
-                <img src={g.src} alt="" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
-                <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {DISHES.map((d) => (
+              <div key={d.name} className="relative overflow-hidden rounded-3xl group aspect-square">
+                <img src={d.img} alt={d.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+                <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute bottom-0 inset-x-0 p-4 translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all">
+                  <div className="font-display text-lg text-background leading-tight">{d.name}</div>
+                  <div className="text-xs text-background/80">${d.price} · {d.cat}</div>
+                </div>
               </div>
             ))}
           </div>
@@ -402,7 +544,7 @@ function RoselleHome() {
                 <div className="mt-8 space-y-4 text-sm">
                   <div className="flex items-center gap-3"><Clock className="h-4 w-4 text-accent" /> Tue – Sun · 6:00 PM – 11:30 PM</div>
                   <div className="flex items-center gap-3"><MapPin className="h-4 w-4 text-accent" /> F-7 Markaz, Islamabad</div>
-                  <div className="flex items-center gap-3"><Phone className="h-4 w-4 text-accent" /> +92 51 111 ROSELLE</div>
+                  <div className="flex items-center gap-3"><Phone className="h-4 w-4 text-accent" /> +92 51 111 GOLDEN</div>
                 </div>
               </div>
               <form
@@ -440,8 +582,8 @@ function RoselleHome() {
             <p className="mt-4 text-muted-foreground max-w-md">Tucked behind a rose-lit courtyard in F-7 Markaz. Valet parking every evening.</p>
             <div className="mt-8 space-y-4 text-sm">
               <div className="flex items-center gap-3"><MapPin className="h-4 w-4 text-accent" /> Street 12, F-7 Markaz, Islamabad, Pakistan</div>
-              <div className="flex items-center gap-3"><Phone className="h-4 w-4 text-accent" /> +92 51 111 ROSELLE</div>
-              <div className="flex items-center gap-3"><Mail className="h-4 w-4 text-accent" /> hello@roselle.pk</div>
+              <div className="flex items-center gap-3"><Phone className="h-4 w-4 text-accent" /> +92 51 111 GOLDEN</div>
+              <div className="flex items-center gap-3"><Mail className="h-4 w-4 text-accent" /> hello@goldenplate.pk</div>
             </div>
             <div className="mt-8 flex gap-3">
               <a href="#" className="inline-flex items-center gap-2 rounded-full bg-foreground text-background px-5 py-3 text-sm magnetic-btn">
@@ -454,7 +596,7 @@ function RoselleHome() {
           </div>
           <div className="glass rounded-[2rem] p-2 shadow-glass">
             <iframe
-              title="Roselle map"
+              title="Golden Plate map"
               src="https://www.google.com/maps?q=F-7+Markaz+Islamabad&output=embed"
               className="w-full h-[420px] rounded-[1.75rem] border-0"
               loading="lazy"
@@ -471,22 +613,22 @@ function RoselleHome() {
               <span className="grid h-9 w-9 place-items-center rounded-full bg-accent text-accent-foreground">
                 <Sparkles className="h-4 w-4" />
               </span>
-              Roselle
+              Golden Plate
             </div>
             <p className="mt-4 text-sm text-muted-foreground">A modern luxury dining room in Islamabad, plated with intent since 2007.</p>
           </div>
           <div>
             <div className="text-xs uppercase tracking-widest text-accent font-semibold">Explore</div>
             <ul className="mt-4 space-y-2 text-sm">
-              {["Menu", "Chefs", "Gallery", "Reservations"].map(l => <li key={l}><a href="#" className="hover:text-accent transition">{l}</a></li>)}
+              {["Menu", "Deals", "Chefs", "Gallery", "Reservations"].map(l => <li key={l}><a href={`#${l.toLowerCase()}`} className="hover:text-accent transition">{l}</a></li>)}
             </ul>
           </div>
           <div>
             <div className="text-xs uppercase tracking-widest text-accent font-semibold">Contact</div>
             <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
               <li>F-7 Markaz, Islamabad</li>
-              <li>+92 51 111 ROSELLE</li>
-              <li>hello@roselle.pk</li>
+              <li>+92 51 111 GOLDEN</li>
+              <li>hello@goldenplate.pk</li>
             </ul>
           </div>
           <div>
@@ -509,7 +651,7 @@ function RoselleHome() {
         </div>
         <div className="border-t border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
-            <div>© {new Date().getFullYear()} Roselle Dining · Islamabad</div>
+            <div>© {new Date().getFullYear()} Golden Plate · Islamabad</div>
             <div className="flex gap-6">
               <a href="#" className="hover:text-accent transition">Privacy</a>
               <a href="#" className="hover:text-accent transition">Terms</a>
@@ -518,7 +660,6 @@ function RoselleHome() {
         </div>
       </footer>
 
-      {/* Back to top */}
       {showTop && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

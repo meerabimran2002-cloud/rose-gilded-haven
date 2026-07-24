@@ -659,6 +659,13 @@ function GoldenPlateHome() {
         </div>
       </footer>
 
+      <a
+        href="#reserve"
+        className="fixed bottom-6 left-6 z-40 inline-flex items-center gap-2 rounded-full bg-accent text-accent-foreground px-5 py-3 text-sm font-medium shadow-luxe magnetic-btn"
+      >
+        <Sparkles className="h-4 w-4" /> Reserve
+      </a>
+
       {showTop && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

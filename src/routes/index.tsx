@@ -131,23 +131,23 @@ const DEALS = [
   },
 ] as const;
 
-// Real chef portraits — different photo for each chef.
+// Real chef portraits — 2 women, 2 men, each a unique photo.
 const CHEFS = [
   {
-    name: "Amara Sadiq", role: "Executive Chef", exp: "18 yrs", spec: "Modern Mediterranean",
-    img: "https://images.unsplash.com/photo-1583394293214-28ded15ee548?w=800&q=80",
-  },
-  {
-    name: "Rafael Moreno", role: "Head Pâtissier", exp: "12 yrs", spec: "Artisan Desserts",
-    img: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&q=80",
-  },
-  {
-    name: "Zara Khan", role: "Chef de Cuisine", exp: "10 yrs", spec: "Wood-Fire & Grill",
+    name: "Ayesha Malik", role: "Executive Chef", exp: "18 yrs", spec: "Modern Mediterranean",
     img: "https://images.unsplash.com/photo-1607631568010-a87245c0daf8?w=800&q=80",
   },
   {
-    name: "Luca Bianchi", role: "Pizza Maestro", exp: "15 yrs", spec: "Neapolitan Wood-Fire",
-    img: "https://images.unsplash.com/photo-1622021142947-da7dedc7c39a?w=800&q=80",
+    name: "Hassan Raza", role: "Head Pâtissier", exp: "12 yrs", spec: "Artisan Desserts",
+    img: "https://images.unsplash.com/photo-1583394293214-28ded15ee548?w=800&q=80",
+  },
+  {
+    name: "Sara Ahmed", role: "Chef de Cuisine", exp: "10 yrs", spec: "Wood-Fire & Grill",
+    img: "https://images.unsplash.com/photo-1595475207225-428b62bda831?w=800&q=80",
+  },
+  {
+    name: "Bilal Sheikh", role: "Pizza Maestro", exp: "15 yrs", spec: "Neapolitan Wood-Fire",
+    img: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&q=80",
   },
 ] as const;
 
@@ -238,33 +238,24 @@ function GoldenPlateHome() {
           <div className="absolute top-1/2 right-1/3 h-24 w-24 rounded-full bg-primary/60 blur-2xl animate-float" />
         </div>
 
-        <div className="mx-auto max-w-7xl px-6 grid lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
+        <div className="mx-auto max-w-7xl px-6 grid lg:grid-cols-[1.15fr_1fr] gap-12 items-center">
           <div className="animate-rise">
             <span className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 text-xs font-medium tracking-wider uppercase">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" /> Now taking reservations · Islamabad
+              <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" /> 3 tables left tonight
             </span>
             <h1 className="mt-6 font-display text-5xl sm:text-6xl lg:text-8xl font-light leading-[0.95]">
-              A quiet kind of <em className="text-gradient not-italic font-medium">luxury</em>,<br />
-              plated in gold.
+              Plated in <em className="text-gradient not-italic font-medium">gold</em>.
             </h1>
-            <p className="mt-6 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed">
-              Golden Plate is a rose-lit dining room in the heart of the capital — where slow craft, seasonal ingredients, and a soft pink glow meet on every plate.
+            <p className="mt-6 max-w-md text-base text-muted-foreground leading-relaxed">
+              A rose-lit dining room in the heart of Islamabad.
             </p>
-            <div className="mt-10 flex flex-wrap gap-4">
-              <a href="#reserve" className="inline-flex items-center gap-2 rounded-full bg-foreground text-background px-7 py-4 text-sm font-medium magnetic-btn">
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a href="#reserve" className="inline-flex items-center gap-2 rounded-full bg-foreground text-background px-6 py-3.5 text-sm font-medium magnetic-btn">
                 Book a Table <ArrowRight className="h-4 w-4" />
               </a>
-              <a href="#menu" className="inline-flex items-center gap-2 rounded-full glass px-7 py-4 text-sm font-medium magnetic-btn">
+              <a href="#menu" className="inline-flex items-center gap-2 rounded-full glass px-6 py-3.5 text-sm font-medium magnetic-btn">
                 View Menu
               </a>
-            </div>
-            <div className="mt-12 flex items-center gap-8">
-              {[["18", "Years"], ["42", "Signature dishes"], ["4.9★", "Guest rating"]].map(([n, l]) => (
-                <div key={l}>
-                  <div className="font-display text-3xl font-medium">{n}</div>
-                  <div className="text-xs uppercase tracking-wider text-muted-foreground">{l}</div>
-                </div>
-              ))}
             </div>
           </div>
 
@@ -289,18 +280,26 @@ function GoldenPlateHome() {
                 <ChefHat className="h-5 w-5 text-accent" />
                 <div>
                   <div className="text-xs text-muted-foreground">Executive Chef</div>
-                  <div className="font-medium text-sm">Amara Sadiq</div>
+                  <div className="font-medium text-sm">Ayesha Malik</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground">
-          <span>Scroll</span>
-          <span className="h-10 w-px bg-gradient-to-b from-accent to-transparent" />
-        </div>
       </section>
+
+      {/* MARQUEE */}
+      <div className="border-y border-border/60 bg-pink-soft/20 overflow-hidden py-4">
+        <div className="flex gap-12 whitespace-nowrap animate-[marquee_35s_linear_infinite] font-display text-2xl text-foreground/70">
+          {Array.from({ length: 2 }).flatMap((_, k) =>
+            ["Wood-fired", "Slow-crafted", "Rose-lit", "Michelin recommended", "Islamabad · F-7", "Since 2007", "Reserve tonight"].map((t, i) => (
+              <span key={`${k}-${i}`} className="flex items-center gap-12">
+                {t} <Sparkles className="h-4 w-4 text-accent" />
+              </span>
+            ))
+          )}
+        </div>
+      </div>
 
       {/* ABOUT */}
       <section id="about" className="py-28">
@@ -659,6 +658,13 @@ function GoldenPlateHome() {
           </div>
         </div>
       </footer>
+
+      <a
+        href="#reserve"
+        className="fixed bottom-6 left-6 z-40 inline-flex items-center gap-2 rounded-full bg-accent text-accent-foreground px-5 py-3 text-sm font-medium shadow-luxe magnetic-btn"
+      >
+        <Sparkles className="h-4 w-4" /> Reserve
+      </a>
 
       {showTop && (
         <button

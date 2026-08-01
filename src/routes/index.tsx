@@ -472,7 +472,7 @@ function GoldenPlateHome() {
             <span className="text-xs uppercase tracking-[0.3em] text-accent font-semibold">The Kitchen</span>
             <h2 className="mt-3 font-display text-5xl lg:text-6xl font-light">Meet the makers.</h2>
           </div>
-          <div className="mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="mt-14 grid gap-8 sm:grid-cols-2 max-w-3xl mx-auto">
             {CHEFS.map((c) => (
               <div key={c.name} className="group tilt-card glass rounded-3xl overflow-hidden">
                 <div className="aspect-[3/4] overflow-hidden">

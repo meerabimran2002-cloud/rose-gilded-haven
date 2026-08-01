@@ -451,9 +451,13 @@ function GoldenPlateHome() {
                     <span className="font-display text-3xl text-gradient">${d.price}</span>
                     <span className="text-sm line-through text-muted-foreground">${d.old}</span>
                   </div>
-                  <a href="#reserve" className="mt-5 w-full inline-flex items-center justify-center gap-2 rounded-full bg-foreground text-background py-3 text-sm font-medium magnetic-btn">
+                  <button
+                    onClick={() => { add({ name: d.title, price: d.price, img: d.img }); setCartOpen(true); }}
+                    className="mt-5 w-full inline-flex items-center justify-center gap-2 rounded-full bg-foreground text-background py-3 text-sm font-medium magnetic-btn"
+                  >
                     Claim deal <ArrowRight className="h-3.5 w-3.5" />
-                  </a>
+                  </button>
+
                 </div>
               </article>
             ))}

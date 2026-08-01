@@ -33,10 +33,17 @@ const IMG = {
 };
 
 const NAV = [
-  ["Home", "#home"], ["About", "#about"], ["Menu", "#menu"],
-  ["Deals", "#deals"], ["Chefs", "#chefs"], ["Gallery", "#gallery"],
-  ["Reviews", "#reviews"], ["Reserve", "#reserve"], ["Contact", "#contact"],
+  { label: "Home", href: "#home", icon: Home },
+  { label: "About", href: "#about", icon: Info },
+  { label: "Menu", href: "#menu", icon: UtensilsCrossed },
+  { label: "Deals", href: "#deals", icon: Percent },
+  { label: "Chefs", href: "#chefs", icon: ChefHat },
+  { label: "Gallery", href: "#gallery", icon: ImageIcon },
+  { label: "Reviews", href: "#reviews", icon: MessageSquare },
+  { label: "Reserve", href: "#reserve", icon: CalendarCheck },
+  { label: "Contact", href: "#contact", icon: MapPin },
 ] as const;
+
 
 const CATEGORIES = ["All", "Starters", "Signature", "Pizza", "Steaks", "Desserts", "Drinks"] as const;
 

@@ -257,7 +257,7 @@ function GoldenPlateHome() {
           <div className="absolute top-1/2 right-1/3 h-24 w-24 rounded-full bg-primary/60 blur-2xl animate-float" />
         </div>
 
-        <div className="mx-auto max-w-7xl px-6 grid lg:grid-cols-[1.15fr_1fr] gap-12 items-center">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-[1.15fr_1fr] gap-12 items-center">
           <div className="animate-rise">
             <span className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 text-xs font-medium tracking-wider uppercase">
               <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" /> 3 tables left tonight
@@ -321,8 +321,8 @@ function GoldenPlateHome() {
       </div>
 
       {/* ABOUT */}
-      <section id="about" className="py-28">
-        <div className="mx-auto max-w-7xl px-6 grid lg:grid-cols-2 gap-16 items-center">
+      <section id="about" className="py-16 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-2 gap-16 items-center">
           <div className="relative">
             <img src={IMG.interior} alt="Golden Plate interior" className="rounded-[2rem] shadow-luxe w-full object-cover aspect-[4/5]" loading="lazy" />
             <div className="absolute -bottom-8 -right-8 glass rounded-3xl p-6 max-w-xs animate-float-slow">
@@ -333,7 +333,7 @@ function GoldenPlateHome() {
           </div>
           <div>
             <span className="text-xs uppercase tracking-[0.3em] text-accent font-semibold">Our Story</span>
-            <h2 className="mt-4 font-display text-5xl lg:text-6xl font-light leading-tight">
+            <h2 className="mt-4 font-display text-4xl sm:text-5xl lg:text-6xl font-light leading-tight">
               Rooted in Islamabad.<br />Refined for a lifetime.
             </h2>
             <p className="mt-6 text-muted-foreground leading-relaxed">
@@ -357,12 +357,12 @@ function GoldenPlateHome() {
       </section>
 
       {/* MENU */}
-      <section id="menu" className="py-28 bg-gradient-to-b from-transparent via-pink-soft/30 to-transparent">
-        <div className="mx-auto max-w-7xl px-6">
+      <section id="menu" className="py-16 sm:py-16 sm:py-28 bg-gradient-to-b from-transparent via-pink-soft/30 to-transparent">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
               <span className="text-xs uppercase tracking-[0.3em] text-accent font-semibold">Signature Menu</span>
-              <h2 className="mt-3 font-display text-5xl lg:text-6xl font-light">Plated with intent.</h2>
+              <h2 className="mt-3 font-display text-4xl sm:text-5xl lg:text-6xl font-light">Plated with intent.</h2>
             </div>
             <div className="flex flex-wrap gap-2">
               {CATEGORIES.map(c => (
@@ -419,14 +419,14 @@ function GoldenPlateHome() {
       </section>
 
       {/* DEALS */}
-      <section id="deals" className="py-28">
-        <div className="mx-auto max-w-7xl px-6">
+      <section id="deals" className="py-16 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
               <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-accent font-semibold">
                 <Flame className="h-3.5 w-3.5" /> Limited Deals
               </span>
-              <h2 className="mt-3 font-display text-5xl lg:text-6xl font-light">Golden offers, warm evenings.</h2>
+              <h2 className="mt-3 font-display text-4xl sm:text-5xl lg:text-6xl font-light">Golden offers, warm evenings.</h2>
             </div>
             <p className="max-w-sm text-sm text-muted-foreground">Curated seasonal deals — available for a limited time. Reserve early to secure your table.</p>
           </div>
@@ -466,11 +466,11 @@ function GoldenPlateHome() {
       </section>
 
       {/* CHEFS */}
-      <section id="chefs" className="py-28 bg-gradient-to-b from-transparent via-pink-soft/30 to-transparent">
-        <div className="mx-auto max-w-7xl px-6">
+      <section id="chefs" className="py-16 sm:py-16 sm:py-28 bg-gradient-to-b from-transparent via-pink-soft/30 to-transparent">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto">
             <span className="text-xs uppercase tracking-[0.3em] text-accent font-semibold">The Kitchen</span>
-            <h2 className="mt-3 font-display text-5xl lg:text-6xl font-light">Meet the makers.</h2>
+            <h2 className="mt-3 font-display text-4xl sm:text-5xl lg:text-6xl font-light">Meet the makers.</h2>
           </div>
           <div className="mt-14 grid gap-8 sm:grid-cols-2 max-w-3xl mx-auto">
             {CHEFS.map((c) => (
@@ -500,12 +500,12 @@ function GoldenPlateHome() {
       </section>
 
       {/* GALLERY — all dishes */}
-      <section id="gallery" className="py-28">
-        <div className="mx-auto max-w-7xl px-6">
+      <section id="gallery" className="py-16 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex items-end justify-between flex-wrap gap-4">
             <div>
               <span className="text-xs uppercase tracking-[0.3em] text-accent font-semibold">Gallery</span>
-              <h2 className="mt-3 font-display text-5xl lg:text-6xl font-light">Every dish, in rose light.</h2>
+              <h2 className="mt-3 font-display text-4xl sm:text-5xl lg:text-6xl font-light">Every dish, in rose light.</h2>
             </div>
             <p className="text-sm text-muted-foreground max-w-sm">A visual walk through every plate on our current menu.</p>
           </div>
@@ -525,11 +525,11 @@ function GoldenPlateHome() {
       </section>
 
       {/* REVIEWS */}
-      <section id="reviews" className="py-28">
-        <div className="mx-auto max-w-7xl px-6">
+      <section id="reviews" className="py-16 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto">
             <span className="text-xs uppercase tracking-[0.3em] text-accent font-semibold">Guests</span>
-            <h2 className="mt-3 font-display text-5xl lg:text-6xl font-light">In their own words.</h2>
+            <h2 className="mt-3 font-display text-4xl sm:text-5xl lg:text-6xl font-light">In their own words.</h2>
           </div>
           <div className="mt-14 grid md:grid-cols-3 gap-6">
             {REVIEWS.map((r) => (
@@ -556,13 +556,13 @@ function GoldenPlateHome() {
       </section>
 
       {/* RESERVE */}
-      <section id="reserve" className="py-28 bg-gradient-to-b from-transparent via-pink-soft/40 to-transparent">
-        <div className="mx-auto max-w-6xl px-6">
+      <section id="reserve" className="py-16 sm:py-16 sm:py-28 bg-gradient-to-b from-transparent via-pink-soft/40 to-transparent">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="glass rounded-[2.5rem] p-8 md:p-14 shadow-luxe">
             <div className="grid lg:grid-cols-2 gap-12">
               <div>
                 <span className="text-xs uppercase tracking-[0.3em] text-accent font-semibold">Reservations</span>
-                <h2 className="mt-3 font-display text-5xl font-light leading-tight">Reserve your evening.</h2>
+                <h2 className="mt-3 font-display text-4xl sm:text-5xl font-light leading-tight">Reserve your evening.</h2>
                 <p className="mt-4 text-muted-foreground">We hold a limited number of tables each night. Reserve at least 24 hours ahead for weekend dining.</p>
                 <div className="mt-8 space-y-4 text-sm">
                   <div className="flex items-center gap-3"><Clock className="h-4 w-4 text-accent" /> Tue – Sun · 6:00 PM – 11:30 PM</div>
@@ -597,11 +597,11 @@ function GoldenPlateHome() {
       </section>
 
       {/* CONTACT */}
-      <section id="contact" className="py-28">
-        <div className="mx-auto max-w-7xl px-6 grid lg:grid-cols-2 gap-12">
+      <section id="contact" className="py-16 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-2 gap-12">
           <div>
             <span className="text-xs uppercase tracking-[0.3em] text-accent font-semibold">Visit</span>
-            <h2 className="mt-3 font-display text-5xl lg:text-6xl font-light">Find us in F-7.</h2>
+            <h2 className="mt-3 font-display text-4xl sm:text-5xl lg:text-6xl font-light">Find us in F-7.</h2>
             <p className="mt-4 text-muted-foreground max-w-md">Tucked behind a rose-lit courtyard in F-7 Markaz. Valet parking every evening.</p>
             <div className="mt-8 space-y-4 text-sm">
               <div className="flex items-center gap-3"><MapPin className="h-4 w-4 text-accent" /> Street 12, F-7 Markaz, Islamabad, Pakistan</div>
@@ -630,7 +630,7 @@ function GoldenPlateHome() {
 
       {/* FOOTER */}
       <footer className="border-t border-border/60 bg-pink-soft/20">
-        <div className="mx-auto max-w-7xl px-6 py-16 grid md:grid-cols-4 gap-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-16 grid md:grid-cols-4 gap-10">
           <div>
             <div className="flex items-center gap-2 font-display text-2xl font-semibold">
               <span className="grid h-9 w-9 place-items-center rounded-full bg-accent text-accent-foreground">
@@ -673,7 +673,7 @@ function GoldenPlateHome() {
           </div>
         </div>
         <div className="border-t border-border/60">
-          <div className="mx-auto max-w-7xl px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
             <div>© {new Date().getFullYear()} Golden Plate · Islamabad</div>
             <div className="flex gap-6">
               <a href="#" className="hover:text-accent transition">Privacy</a>

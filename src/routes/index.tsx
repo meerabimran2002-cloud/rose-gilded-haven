@@ -165,7 +165,8 @@ function GoldenPlateHome() {
   const [navOpen, setNavOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [filter, setFilter] = useState<(typeof CATEGORIES)[number]>("All");
-  const [cart, setCart] = useState(0);
+  const [cartOpen, setCartOpen] = useState(false);
+  const { add, count } = useCart();
   const [wish, setWish] = useState<Set<string>>(new Set());
   const [showTop, setShowTop] = useState(false);
   const [booked, setBooked] = useState(false);
@@ -187,48 +188,62 @@ function GoldenPlateHome() {
 
   return (
     <div id="home" className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
+
       {/* NAV */}
-      <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${scrolled ? "py-3 glass shadow-glass" : "py-6"}`}>
-        <div className="mx-auto max-w-7xl px-6 flex items-center justify-between">
-          <a href="#home" className="flex items-center gap-2 font-display text-2xl font-semibold tracking-tight">
-            <span className="grid h-9 w-9 place-items-center rounded-full bg-accent text-accent-foreground">
+      <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${scrolled ? "py-3 glass shadow-glass" : "py-4 sm:py-6"}`}>
+        <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 sm:px-6">
+          <a href="#home" className="flex min-w-0 items-center gap-2 font-display text-xl font-semibold tracking-tight sm:text-2xl">
+            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-accent text-accent-foreground">
               <Sparkles className="h-4 w-4" />
             </span>
-            Golden Plate
+            <span className="truncate">Golden Plate</span>
           </a>
-          <nav className="hidden lg:flex items-center gap-7 text-sm font-medium">
-            {NAV.map(([l, h]) => (
-              <a key={l} href={h} className="relative group text-foreground/80 hover:text-foreground transition">
-                {l}
+          <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
+            {NAV.map(({ label, href, icon: Icon }) => (
+              <a key={label} href={href} className="relative group inline-flex items-center gap-1.5 text-foreground/80 hover:text-foreground transition">
+                <Icon className="h-3.5 w-3.5 text-accent" />
+                {label}
                 <span className="absolute -bottom-1 left-0 h-px w-0 bg-accent transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
           </nav>
-          <div className="flex items-center gap-3">
-            <button className="relative rounded-full glass p-2.5 hover:shadow-glass transition" aria-label="Cart">
+          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+            <Link to="/admin" className="hidden sm:inline-flex items-center gap-1.5 rounded-full glass px-4 py-2.5 text-sm font-medium hover:shadow-glass transition">
+              <Lock className="h-3.5 w-3.5 text-accent" /> Admin
+            </Link>
+            <button onClick={() => setCartOpen(true)} className="relative rounded-full glass p-2.5 hover:shadow-glass transition" aria-label="Open cart">
               <ShoppingBag className="h-4 w-4" />
-              {cart > 0 && (
-                <span className="absolute -top-1 -right-1 grid h-5 w-5 place-items-center rounded-full bg-accent text-accent-foreground text-[10px] font-semibold">{cart}</span>
+              {count > 0 && (
+                <span className="absolute -top-1 -right-1 grid h-5 w-5 place-items-center rounded-full bg-accent text-accent-foreground text-[10px] font-semibold">{count}</span>
               )}
             </button>
             <a href="#reserve" className="hidden md:inline-flex items-center gap-2 rounded-full bg-foreground text-background px-5 py-2.5 text-sm font-medium magnetic-btn">
               Reserve <ArrowRight className="h-3.5 w-3.5" />
             </a>
-            <button className="lg:hidden rounded-full glass p-2.5" onClick={() => setNavOpen(v => !v)} aria-label="Menu">
+            <button className="lg:hidden rounded-full glass p-2.5" onClick={() => setNavOpen(v => !v)} aria-label="Toggle menu">
               {navOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </button>
           </div>
         </div>
         {navOpen && (
-          <div className="lg:hidden mx-6 mt-3 glass rounded-3xl p-6 animate-rise">
-            <div className="flex flex-col gap-4">
-              {NAV.map(([l, h]) => (
-                <a key={l} href={h} onClick={() => setNavOpen(false)} className="text-base font-medium">{l}</a>
+          <div className="lg:hidden mx-4 mt-3 glass rounded-3xl p-4 animate-rise sm:mx-6">
+            <div className="grid grid-cols-2 gap-2">
+              {NAV.map(({ label, href, icon: Icon }) => (
+                <a key={label} href={href} onClick={() => setNavOpen(false)}
+                  className="flex items-center gap-2 rounded-2xl bg-background/60 px-4 py-3 text-sm font-medium">
+                  <Icon className="h-4 w-4 shrink-0 text-accent" /> {label}
+                </a>
               ))}
+              <Link to="/admin" onClick={() => setNavOpen(false)}
+                className="col-span-2 flex items-center justify-center gap-2 rounded-2xl bg-foreground px-4 py-3 text-sm font-medium text-background">
+                <Lock className="h-4 w-4" /> Admin Portal
+              </Link>
             </div>
           </div>
         )}
       </header>
+
 
       {/* HERO */}
       <section className="relative min-h-screen flex items-center pt-24 pb-20">

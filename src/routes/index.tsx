@@ -405,11 +405,12 @@ function GoldenPlateHome() {
                     <span className="text-accent">{d.cat}</span>
                   </div>
                   <button
-                    onClick={() => setCart(c => c + 1)}
+                    onClick={() => { add({ name: d.name, price: d.price, img: d.img }); setCartOpen(true); }}
                     className="mt-5 w-full inline-flex items-center justify-center gap-2 rounded-full bg-foreground text-background py-3 text-sm font-medium magnetic-btn"
                   >
                     Add to order <ShoppingBag className="h-3.5 w-3.5" />
                   </button>
+
                 </div>
               </article>
             ))}

@@ -1,10 +1,14 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
   Menu, X, Star, Heart, ShoppingBag, ArrowRight, ArrowUp,
   MapPin, Phone, Mail, Clock, Facebook, Instagram, Twitter,
   ChefHat, Award, Users, Utensils, Send, Sparkles, Flame, Percent,
+  Home, Info, UtensilsCrossed, Image as ImageIcon, MessageSquare, CalendarCheck, Lock,
 } from "lucide-react";
+import { useCart } from "@/lib/store";
+import { CartDrawer } from "@/components/CartDrawer";
+
 
 export const Route = createFileRoute("/")({
   component: GoldenPlateHome,

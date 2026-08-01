@@ -131,25 +131,18 @@ const DEALS = [
   },
 ] as const;
 
-// Real chef portraits — 2 women, 2 men, each a unique photo.
+// Two chefs — a woman and a man, each with a matching real portrait.
 const CHEFS = [
   {
-    name: "Ayesha Malik", role: "Executive Chef", exp: "18 yrs", spec: "Modern Mediterranean",
+    name: "Zara Khan", role: "Executive Chef", exp: "18 yrs", spec: "Modern Mediterranean",
     img: "https://images.unsplash.com/photo-1607631568010-a87245c0daf8?w=800&q=80",
   },
   {
-    name: "Hassan Raza", role: "Head Pâtissier", exp: "12 yrs", spec: "Artisan Desserts",
+    name: "Ali Khan", role: "Head Chef & Pâtissier", exp: "15 yrs", spec: "Wood-Fire & Desserts",
     img: "https://images.unsplash.com/photo-1583394293214-28ded15ee548?w=800&q=80",
   },
-  {
-    name: "Sara Ahmed", role: "Chef de Cuisine", exp: "10 yrs", spec: "Wood-Fire & Grill",
-    img: "https://images.unsplash.com/photo-1595475207225-428b62bda831?w=800&q=80",
-  },
-  {
-    name: "Bilal Sheikh", role: "Pizza Maestro", exp: "15 yrs", spec: "Neapolitan Wood-Fire",
-    img: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&q=80",
-  },
 ] as const;
+
 
 const REVIEWS = [
   { name: "Ayesha M.", rating: 5, text: "The most beautiful dining room in Islamabad. Every plate feels like a love letter." },

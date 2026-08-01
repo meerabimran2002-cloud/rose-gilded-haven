@@ -1,10 +1,14 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
   Menu, X, Star, Heart, ShoppingBag, ArrowRight, ArrowUp,
   MapPin, Phone, Mail, Clock, Facebook, Instagram, Twitter,
   ChefHat, Award, Users, Utensils, Send, Sparkles, Flame, Percent,
+  Home, Info, UtensilsCrossed, Image as ImageIcon, MessageSquare, CalendarCheck, Lock,
 } from "lucide-react";
+import { useCart } from "@/lib/store";
+import { CartDrawer } from "@/components/CartDrawer";
+
 
 export const Route = createFileRoute("/")({
   component: GoldenPlateHome,
@@ -29,10 +33,17 @@ const IMG = {
 };
 
 const NAV = [
-  ["Home", "#home"], ["About", "#about"], ["Menu", "#menu"],
-  ["Deals", "#deals"], ["Chefs", "#chefs"], ["Gallery", "#gallery"],
-  ["Reviews", "#reviews"], ["Reserve", "#reserve"], ["Contact", "#contact"],
+  { label: "Home", href: "#home", icon: Home },
+  { label: "About", href: "#about", icon: Info },
+  { label: "Menu", href: "#menu", icon: UtensilsCrossed },
+  { label: "Deals", href: "#deals", icon: Percent },
+  { label: "Chefs", href: "#chefs", icon: ChefHat },
+  { label: "Gallery", href: "#gallery", icon: ImageIcon },
+  { label: "Reviews", href: "#reviews", icon: MessageSquare },
+  { label: "Reserve", href: "#reserve", icon: CalendarCheck },
+  { label: "Contact", href: "#contact", icon: MapPin },
 ] as const;
+
 
 const CATEGORIES = ["All", "Starters", "Signature", "Pizza", "Steaks", "Desserts", "Drinks"] as const;
 
@@ -131,25 +142,18 @@ const DEALS = [
   },
 ] as const;
 
-// Real chef portraits — 2 women, 2 men, each a unique photo.
+// Two chefs — a woman and a man, each with a matching real portrait.
 const CHEFS = [
   {
-    name: "Ayesha Malik", role: "Executive Chef", exp: "18 yrs", spec: "Modern Mediterranean",
+    name: "Zara Khan", role: "Executive Chef", exp: "18 yrs", spec: "Modern Mediterranean",
     img: "https://images.unsplash.com/photo-1607631568010-a87245c0daf8?w=800&q=80",
   },
   {
-    name: "Hassan Raza", role: "Head Pâtissier", exp: "12 yrs", spec: "Artisan Desserts",
+    name: "Ali Khan", role: "Head Chef & Pâtissier", exp: "15 yrs", spec: "Wood-Fire & Desserts",
     img: "https://images.unsplash.com/photo-1583394293214-28ded15ee548?w=800&q=80",
   },
-  {
-    name: "Sara Ahmed", role: "Chef de Cuisine", exp: "10 yrs", spec: "Wood-Fire & Grill",
-    img: "https://images.unsplash.com/photo-1595475207225-428b62bda831?w=800&q=80",
-  },
-  {
-    name: "Bilal Sheikh", role: "Pizza Maestro", exp: "15 yrs", spec: "Neapolitan Wood-Fire",
-    img: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&q=80",
-  },
 ] as const;
+
 
 const REVIEWS = [
   { name: "Ayesha M.", rating: 5, text: "The most beautiful dining room in Islamabad. Every plate feels like a love letter." },
@@ -161,7 +165,8 @@ function GoldenPlateHome() {
   const [navOpen, setNavOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [filter, setFilter] = useState<(typeof CATEGORIES)[number]>("All");
-  const [cart, setCart] = useState(0);
+  const [cartOpen, setCartOpen] = useState(false);
+  const { add, count } = useCart();
   const [wish, setWish] = useState<Set<string>>(new Set());
   const [showTop, setShowTop] = useState(false);
   const [booked, setBooked] = useState(false);
@@ -183,48 +188,62 @@ function GoldenPlateHome() {
 
   return (
     <div id="home" className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
+
       {/* NAV */}
-      <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${scrolled ? "py-3 glass shadow-glass" : "py-6"}`}>
-        <div className="mx-auto max-w-7xl px-6 flex items-center justify-between">
-          <a href="#home" className="flex items-center gap-2 font-display text-2xl font-semibold tracking-tight">
-            <span className="grid h-9 w-9 place-items-center rounded-full bg-accent text-accent-foreground">
+      <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${scrolled ? "py-3 glass shadow-glass" : "py-4 sm:py-6"}`}>
+        <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 sm:px-6">
+          <a href="#home" className="flex min-w-0 items-center gap-2 font-display text-xl font-semibold tracking-tight sm:text-2xl">
+            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-accent text-accent-foreground">
               <Sparkles className="h-4 w-4" />
             </span>
-            Golden Plate
+            <span className="truncate">Golden Plate</span>
           </a>
-          <nav className="hidden lg:flex items-center gap-7 text-sm font-medium">
-            {NAV.map(([l, h]) => (
-              <a key={l} href={h} className="relative group text-foreground/80 hover:text-foreground transition">
-                {l}
+          <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
+            {NAV.map(({ label, href, icon: Icon }) => (
+              <a key={label} href={href} className="relative group inline-flex items-center gap-1.5 text-foreground/80 hover:text-foreground transition">
+                <Icon className="h-3.5 w-3.5 text-accent" />
+                {label}
                 <span className="absolute -bottom-1 left-0 h-px w-0 bg-accent transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
           </nav>
-          <div className="flex items-center gap-3">
-            <button className="relative rounded-full glass p-2.5 hover:shadow-glass transition" aria-label="Cart">
+          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+            <Link to="/admin" className="hidden sm:inline-flex items-center gap-1.5 rounded-full glass px-4 py-2.5 text-sm font-medium hover:shadow-glass transition">
+              <Lock className="h-3.5 w-3.5 text-accent" /> Admin
+            </Link>
+            <button onClick={() => setCartOpen(true)} className="relative rounded-full glass p-2.5 hover:shadow-glass transition" aria-label="Open cart">
               <ShoppingBag className="h-4 w-4" />
-              {cart > 0 && (
-                <span className="absolute -top-1 -right-1 grid h-5 w-5 place-items-center rounded-full bg-accent text-accent-foreground text-[10px] font-semibold">{cart}</span>
+              {count > 0 && (
+                <span className="absolute -top-1 -right-1 grid h-5 w-5 place-items-center rounded-full bg-accent text-accent-foreground text-[10px] font-semibold">{count}</span>
               )}
             </button>
             <a href="#reserve" className="hidden md:inline-flex items-center gap-2 rounded-full bg-foreground text-background px-5 py-2.5 text-sm font-medium magnetic-btn">
               Reserve <ArrowRight className="h-3.5 w-3.5" />
             </a>
-            <button className="lg:hidden rounded-full glass p-2.5" onClick={() => setNavOpen(v => !v)} aria-label="Menu">
+            <button className="lg:hidden rounded-full glass p-2.5" onClick={() => setNavOpen(v => !v)} aria-label="Toggle menu">
               {navOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </button>
           </div>
         </div>
         {navOpen && (
-          <div className="lg:hidden mx-6 mt-3 glass rounded-3xl p-6 animate-rise">
-            <div className="flex flex-col gap-4">
-              {NAV.map(([l, h]) => (
-                <a key={l} href={h} onClick={() => setNavOpen(false)} className="text-base font-medium">{l}</a>
+          <div className="lg:hidden mx-4 mt-3 glass rounded-3xl p-4 animate-rise sm:mx-6">
+            <div className="grid grid-cols-2 gap-2">
+              {NAV.map(({ label, href, icon: Icon }) => (
+                <a key={label} href={href} onClick={() => setNavOpen(false)}
+                  className="flex items-center gap-2 rounded-2xl bg-background/60 px-4 py-3 text-sm font-medium">
+                  <Icon className="h-4 w-4 shrink-0 text-accent" /> {label}
+                </a>
               ))}
+              <Link to="/admin" onClick={() => setNavOpen(false)}
+                className="col-span-2 flex items-center justify-center gap-2 rounded-2xl bg-foreground px-4 py-3 text-sm font-medium text-background">
+                <Lock className="h-4 w-4" /> Admin Portal
+              </Link>
             </div>
           </div>
         )}
       </header>
+
 
       {/* HERO */}
       <section className="relative min-h-screen flex items-center pt-24 pb-20">
@@ -238,7 +257,7 @@ function GoldenPlateHome() {
           <div className="absolute top-1/2 right-1/3 h-24 w-24 rounded-full bg-primary/60 blur-2xl animate-float" />
         </div>
 
-        <div className="mx-auto max-w-7xl px-6 grid lg:grid-cols-[1.15fr_1fr] gap-12 items-center">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-[1.15fr_1fr] gap-12 items-center">
           <div className="animate-rise">
             <span className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 text-xs font-medium tracking-wider uppercase">
               <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" /> 3 tables left tonight
@@ -280,7 +299,7 @@ function GoldenPlateHome() {
                 <ChefHat className="h-5 w-5 text-accent" />
                 <div>
                   <div className="text-xs text-muted-foreground">Executive Chef</div>
-                  <div className="font-medium text-sm">Ayesha Malik</div>
+                  <div className="font-medium text-sm">Zara Khan</div>
                 </div>
               </div>
             </div>
@@ -302,8 +321,8 @@ function GoldenPlateHome() {
       </div>
 
       {/* ABOUT */}
-      <section id="about" className="py-28">
-        <div className="mx-auto max-w-7xl px-6 grid lg:grid-cols-2 gap-16 items-center">
+      <section id="about" className="py-16 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-2 gap-16 items-center">
           <div className="relative">
             <img src={IMG.interior} alt="Golden Plate interior" className="rounded-[2rem] shadow-luxe w-full object-cover aspect-[4/5]" loading="lazy" />
             <div className="absolute -bottom-8 -right-8 glass rounded-3xl p-6 max-w-xs animate-float-slow">
@@ -314,7 +333,7 @@ function GoldenPlateHome() {
           </div>
           <div>
             <span className="text-xs uppercase tracking-[0.3em] text-accent font-semibold">Our Story</span>
-            <h2 className="mt-4 font-display text-5xl lg:text-6xl font-light leading-tight">
+            <h2 className="mt-4 font-display text-4xl sm:text-5xl lg:text-6xl font-light leading-tight">
               Rooted in Islamabad.<br />Refined for a lifetime.
             </h2>
             <p className="mt-6 text-muted-foreground leading-relaxed">
@@ -338,12 +357,12 @@ function GoldenPlateHome() {
       </section>
 
       {/* MENU */}
-      <section id="menu" className="py-28 bg-gradient-to-b from-transparent via-pink-soft/30 to-transparent">
-        <div className="mx-auto max-w-7xl px-6">
+      <section id="menu" className="py-16 sm:py-28 bg-gradient-to-b from-transparent via-pink-soft/30 to-transparent">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
               <span className="text-xs uppercase tracking-[0.3em] text-accent font-semibold">Signature Menu</span>
-              <h2 className="mt-3 font-display text-5xl lg:text-6xl font-light">Plated with intent.</h2>
+              <h2 className="mt-3 font-display text-4xl sm:text-5xl lg:text-6xl font-light">Plated with intent.</h2>
             </div>
             <div className="flex flex-wrap gap-2">
               {CATEGORIES.map(c => (
@@ -386,11 +405,12 @@ function GoldenPlateHome() {
                     <span className="text-accent">{d.cat}</span>
                   </div>
                   <button
-                    onClick={() => setCart(c => c + 1)}
+                    onClick={() => { add({ name: d.name, price: d.price, img: d.img }); setCartOpen(true); }}
                     className="mt-5 w-full inline-flex items-center justify-center gap-2 rounded-full bg-foreground text-background py-3 text-sm font-medium magnetic-btn"
                   >
                     Add to order <ShoppingBag className="h-3.5 w-3.5" />
                   </button>
+
                 </div>
               </article>
             ))}
@@ -399,14 +419,14 @@ function GoldenPlateHome() {
       </section>
 
       {/* DEALS */}
-      <section id="deals" className="py-28">
-        <div className="mx-auto max-w-7xl px-6">
+      <section id="deals" className="py-16 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
               <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-accent font-semibold">
                 <Flame className="h-3.5 w-3.5" /> Limited Deals
               </span>
-              <h2 className="mt-3 font-display text-5xl lg:text-6xl font-light">Golden offers, warm evenings.</h2>
+              <h2 className="mt-3 font-display text-4xl sm:text-5xl lg:text-6xl font-light">Golden offers, warm evenings.</h2>
             </div>
             <p className="max-w-sm text-sm text-muted-foreground">Curated seasonal deals — available for a limited time. Reserve early to secure your table.</p>
           </div>
@@ -431,9 +451,13 @@ function GoldenPlateHome() {
                     <span className="font-display text-3xl text-gradient">${d.price}</span>
                     <span className="text-sm line-through text-muted-foreground">${d.old}</span>
                   </div>
-                  <a href="#reserve" className="mt-5 w-full inline-flex items-center justify-center gap-2 rounded-full bg-foreground text-background py-3 text-sm font-medium magnetic-btn">
+                  <button
+                    onClick={() => { add({ name: d.title, price: d.price, img: d.img }); setCartOpen(true); }}
+                    className="mt-5 w-full inline-flex items-center justify-center gap-2 rounded-full bg-foreground text-background py-3 text-sm font-medium magnetic-btn"
+                  >
                     Claim deal <ArrowRight className="h-3.5 w-3.5" />
-                  </a>
+                  </button>
+
                 </div>
               </article>
             ))}
@@ -442,13 +466,13 @@ function GoldenPlateHome() {
       </section>
 
       {/* CHEFS */}
-      <section id="chefs" className="py-28 bg-gradient-to-b from-transparent via-pink-soft/30 to-transparent">
-        <div className="mx-auto max-w-7xl px-6">
+      <section id="chefs" className="py-16 sm:py-28 bg-gradient-to-b from-transparent via-pink-soft/30 to-transparent">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto">
             <span className="text-xs uppercase tracking-[0.3em] text-accent font-semibold">The Kitchen</span>
-            <h2 className="mt-3 font-display text-5xl lg:text-6xl font-light">Meet the makers.</h2>
+            <h2 className="mt-3 font-display text-4xl sm:text-5xl lg:text-6xl font-light">Meet the makers.</h2>
           </div>
-          <div className="mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="mt-14 grid gap-8 sm:grid-cols-2 max-w-3xl mx-auto">
             {CHEFS.map((c) => (
               <div key={c.name} className="group tilt-card glass rounded-3xl overflow-hidden">
                 <div className="aspect-[3/4] overflow-hidden">
@@ -476,12 +500,12 @@ function GoldenPlateHome() {
       </section>
 
       {/* GALLERY — all dishes */}
-      <section id="gallery" className="py-28">
-        <div className="mx-auto max-w-7xl px-6">
+      <section id="gallery" className="py-16 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex items-end justify-between flex-wrap gap-4">
             <div>
               <span className="text-xs uppercase tracking-[0.3em] text-accent font-semibold">Gallery</span>
-              <h2 className="mt-3 font-display text-5xl lg:text-6xl font-light">Every dish, in rose light.</h2>
+              <h2 className="mt-3 font-display text-4xl sm:text-5xl lg:text-6xl font-light">Every dish, in rose light.</h2>
             </div>
             <p className="text-sm text-muted-foreground max-w-sm">A visual walk through every plate on our current menu.</p>
           </div>
@@ -501,11 +525,11 @@ function GoldenPlateHome() {
       </section>
 
       {/* REVIEWS */}
-      <section id="reviews" className="py-28">
-        <div className="mx-auto max-w-7xl px-6">
+      <section id="reviews" className="py-16 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto">
             <span className="text-xs uppercase tracking-[0.3em] text-accent font-semibold">Guests</span>
-            <h2 className="mt-3 font-display text-5xl lg:text-6xl font-light">In their own words.</h2>
+            <h2 className="mt-3 font-display text-4xl sm:text-5xl lg:text-6xl font-light">In their own words.</h2>
           </div>
           <div className="mt-14 grid md:grid-cols-3 gap-6">
             {REVIEWS.map((r) => (
@@ -532,13 +556,13 @@ function GoldenPlateHome() {
       </section>
 
       {/* RESERVE */}
-      <section id="reserve" className="py-28 bg-gradient-to-b from-transparent via-pink-soft/40 to-transparent">
-        <div className="mx-auto max-w-6xl px-6">
+      <section id="reserve" className="py-16 sm:py-28 bg-gradient-to-b from-transparent via-pink-soft/40 to-transparent">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="glass rounded-[2.5rem] p-8 md:p-14 shadow-luxe">
             <div className="grid lg:grid-cols-2 gap-12">
               <div>
                 <span className="text-xs uppercase tracking-[0.3em] text-accent font-semibold">Reservations</span>
-                <h2 className="mt-3 font-display text-5xl font-light leading-tight">Reserve your evening.</h2>
+                <h2 className="mt-3 font-display text-4xl sm:text-5xl font-light leading-tight">Reserve your evening.</h2>
                 <p className="mt-4 text-muted-foreground">We hold a limited number of tables each night. Reserve at least 24 hours ahead for weekend dining.</p>
                 <div className="mt-8 space-y-4 text-sm">
                   <div className="flex items-center gap-3"><Clock className="h-4 w-4 text-accent" /> Tue – Sun · 6:00 PM – 11:30 PM</div>
@@ -573,11 +597,11 @@ function GoldenPlateHome() {
       </section>
 
       {/* CONTACT */}
-      <section id="contact" className="py-28">
-        <div className="mx-auto max-w-7xl px-6 grid lg:grid-cols-2 gap-12">
+      <section id="contact" className="py-16 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-2 gap-12">
           <div>
             <span className="text-xs uppercase tracking-[0.3em] text-accent font-semibold">Visit</span>
-            <h2 className="mt-3 font-display text-5xl lg:text-6xl font-light">Find us in F-7.</h2>
+            <h2 className="mt-3 font-display text-4xl sm:text-5xl lg:text-6xl font-light">Find us in F-7.</h2>
             <p className="mt-4 text-muted-foreground max-w-md">Tucked behind a rose-lit courtyard in F-7 Markaz. Valet parking every evening.</p>
             <div className="mt-8 space-y-4 text-sm">
               <div className="flex items-center gap-3"><MapPin className="h-4 w-4 text-accent" /> Street 12, F-7 Markaz, Islamabad, Pakistan</div>
@@ -606,7 +630,7 @@ function GoldenPlateHome() {
 
       {/* FOOTER */}
       <footer className="border-t border-border/60 bg-pink-soft/20">
-        <div className="mx-auto max-w-7xl px-6 py-16 grid md:grid-cols-4 gap-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-16 grid md:grid-cols-4 gap-10">
           <div>
             <div className="flex items-center gap-2 font-display text-2xl font-semibold">
               <span className="grid h-9 w-9 place-items-center rounded-full bg-accent text-accent-foreground">
@@ -620,7 +644,9 @@ function GoldenPlateHome() {
             <div className="text-xs uppercase tracking-widest text-accent font-semibold">Explore</div>
             <ul className="mt-4 space-y-2 text-sm">
               {["Menu", "Deals", "Chefs", "Gallery", "Reservations"].map(l => <li key={l}><a href={`#${l.toLowerCase()}`} className="hover:text-accent transition">{l}</a></li>)}
+              <li><Link to="/admin" className="inline-flex items-center gap-1.5 hover:text-accent transition"><Lock className="h-3 w-3" /> Admin Portal</Link></li>
             </ul>
+
           </div>
           <div>
             <div className="text-xs uppercase tracking-widest text-accent font-semibold">Contact</div>
@@ -649,7 +675,7 @@ function GoldenPlateHome() {
           </div>
         </div>
         <div className="border-t border-border/60">
-          <div className="mx-auto max-w-7xl px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
             <div>© {new Date().getFullYear()} Golden Plate · Islamabad</div>
             <div className="flex gap-6">
               <a href="#" className="hover:text-accent transition">Privacy</a>

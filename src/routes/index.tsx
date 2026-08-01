@@ -644,7 +644,9 @@ function GoldenPlateHome() {
             <div className="text-xs uppercase tracking-widest text-accent font-semibold">Explore</div>
             <ul className="mt-4 space-y-2 text-sm">
               {["Menu", "Deals", "Chefs", "Gallery", "Reservations"].map(l => <li key={l}><a href={`#${l.toLowerCase()}`} className="hover:text-accent transition">{l}</a></li>)}
+              <li><Link to="/admin" className="inline-flex items-center gap-1.5 hover:text-accent transition"><Lock className="h-3 w-3" /> Admin Portal</Link></li>
             </ul>
+
           </div>
           <div>
             <div className="text-xs uppercase tracking-widest text-accent font-semibold">Contact</div>

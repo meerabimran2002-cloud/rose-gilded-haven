@@ -357,7 +357,7 @@ function GoldenPlateHome() {
       </section>
 
       {/* MENU */}
-      <section id="menu" className="py-16 sm:py-16 sm:py-28 bg-gradient-to-b from-transparent via-pink-soft/30 to-transparent">
+      <section id="menu" className="py-16 sm:py-28 bg-gradient-to-b from-transparent via-pink-soft/30 to-transparent">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
@@ -466,7 +466,7 @@ function GoldenPlateHome() {
       </section>
 
       {/* CHEFS */}
-      <section id="chefs" className="py-16 sm:py-16 sm:py-28 bg-gradient-to-b from-transparent via-pink-soft/30 to-transparent">
+      <section id="chefs" className="py-16 sm:py-28 bg-gradient-to-b from-transparent via-pink-soft/30 to-transparent">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto">
             <span className="text-xs uppercase tracking-[0.3em] text-accent font-semibold">The Kitchen</span>
@@ -556,7 +556,7 @@ function GoldenPlateHome() {
       </section>
 
       {/* RESERVE */}
-      <section id="reserve" className="py-16 sm:py-16 sm:py-28 bg-gradient-to-b from-transparent via-pink-soft/40 to-transparent">
+      <section id="reserve" className="py-16 sm:py-28 bg-gradient-to-b from-transparent via-pink-soft/40 to-transparent">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="glass rounded-[2.5rem] p-8 md:p-14 shadow-luxe">
             <div className="grid lg:grid-cols-2 gap-12">

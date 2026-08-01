@@ -299,7 +299,7 @@ function GoldenPlateHome() {
                 <ChefHat className="h-5 w-5 text-accent" />
                 <div>
                   <div className="text-xs text-muted-foreground">Executive Chef</div>
-                  <div className="font-medium text-sm">Ayesha Malik</div>
+                  <div className="font-medium text-sm">Zara Khan</div>
                 </div>
               </div>
             </div>

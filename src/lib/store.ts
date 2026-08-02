@@ -13,7 +13,22 @@ export type Order = {
 
 const CART_KEY = "gp_cart_v1";
 const ORDERS_KEY = "gp_orders_v1";
+const RESERVATIONS_KEY = "gp_reservations_v1";
 const ADMIN_KEY = "gp_admin_session_v1";
+
+export type Reservation = {
+  id: string;
+  createdAt: string;
+  name: string;
+  email: string;
+  phone: string;
+  guests: string;
+  date: string;
+  time: string;
+  note?: string;
+  status: "new" | "confirmed" | "seated" | "cancelled";
+};
+
 
 export const ADMIN_EMAIL = "meerab.imran.2002@gmail.com";
 export const ADMIN_PASSWORD = "meerabkhan123456";
@@ -98,6 +113,29 @@ export function useOrders() {
 
   return { orders, place, setStatus, removeOrder };
 }
+
+export function useReservations() {
+  const [reservations, setReservations] = useStored<Reservation[]>(RESERVATIONS_KEY, []);
+
+  const book = (data: Omit<Reservation, "id" | "createdAt" | "status">): Reservation => {
+    const r: Reservation = {
+      id: `RS-${Date.now().toString().slice(-6)}`,
+      createdAt: new Date().toISOString(),
+      status: "new",
+      ...data,
+    };
+    setReservations([r, ...reservations]);
+    return r;
+  };
+
+  const setReservationStatus = (id: string, status: Reservation["status"]) =>
+    setReservations(reservations.map((r) => (r.id === id ? { ...r, status } : r)));
+
+  const removeReservation = (id: string) => setReservations(reservations.filter((r) => r.id !== id));
+
+  return { reservations, book, setReservationStatus, removeReservation };
+}
+
 
 export function isAdminLoggedIn() {
   return read<boolean>(ADMIN_KEY, false);

@@ -13,7 +13,22 @@ export type Order = {
 
 const CART_KEY = "gp_cart_v1";
 const ORDERS_KEY = "gp_orders_v1";
+const RESERVATIONS_KEY = "gp_reservations_v1";
 const ADMIN_KEY = "gp_admin_session_v1";
+
+export type Reservation = {
+  id: string;
+  createdAt: string;
+  name: string;
+  email: string;
+  phone: string;
+  guests: string;
+  date: string;
+  time: string;
+  note?: string;
+  status: "new" | "confirmed" | "seated" | "cancelled";
+};
+
 
 export const ADMIN_EMAIL = "meerab.imran.2002@gmail.com";
 export const ADMIN_PASSWORD = "meerabkhan123456";

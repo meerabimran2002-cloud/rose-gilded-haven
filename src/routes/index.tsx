@@ -6,7 +6,7 @@ import {
   ChefHat, Award, Users, Utensils, Send, Sparkles, Flame, Percent,
   Home, Info, UtensilsCrossed, Image as ImageIcon, MessageSquare, CalendarCheck, Lock,
 } from "lucide-react";
-import { useCart } from "@/lib/store";
+import { useCart, useReservations } from "@/lib/store";
 import { CartDrawer } from "@/components/CartDrawer";
 
 
@@ -167,6 +167,7 @@ function GoldenPlateHome() {
   const [filter, setFilter] = useState<(typeof CATEGORIES)[number]>("All");
   const [cartOpen, setCartOpen] = useState(false);
   const { add, count } = useCart();
+  const { book } = useReservations();
   const [wish, setWish] = useState<Set<string>>(new Set());
   const [showTop, setShowTop] = useState(false);
   const [booked, setBooked] = useState(false);
@@ -571,21 +572,36 @@ function GoldenPlateHome() {
                 </div>
               </div>
               <form
-                onSubmit={(e) => { e.preventDefault(); setBooked(true); setTimeout(() => setBooked(false), 4000); }}
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const fd = new FormData(e.currentTarget);
+                  book({
+                    name: String(fd.get("name") || ""),
+                    email: String(fd.get("email") || ""),
+                    phone: String(fd.get("phone") || ""),
+                    guests: String(fd.get("guests") || ""),
+                    date: String(fd.get("date") || ""),
+                    time: String(fd.get("time") || ""),
+                    note: String(fd.get("note") || ""),
+                  });
+                  e.currentTarget.reset();
+                  setBooked(true);
+                  setTimeout(() => setBooked(false), 4000);
+                }}
                 className="grid grid-cols-2 gap-4"
               >
                 {[
-                  { p: "Full name", t: "text", span: "col-span-2" },
-                  { p: "Email", t: "email", span: "col-span-2 md:col-span-1" },
-                  { p: "Phone", t: "tel", span: "col-span-2 md:col-span-1" },
-                  { p: "Guests", t: "number", span: "col-span-1" },
-                  { p: "Date", t: "date", span: "col-span-1" },
+                  { n: "name", p: "Full name", t: "text", span: "col-span-2" },
+                  { n: "email", p: "Email", t: "email", span: "col-span-2 md:col-span-1" },
+                  { n: "phone", p: "Phone", t: "tel", span: "col-span-2 md:col-span-1" },
+                  { n: "guests", p: "Guests", t: "number", span: "col-span-1" },
+                  { n: "date", p: "Date", t: "date", span: "col-span-1" },
                 ].map(f => (
-                  <input key={f.p} required type={f.t} placeholder={f.p}
+                  <input key={f.p} required name={f.n} type={f.t} placeholder={f.p}
                     className={`${f.span} rounded-2xl border border-border bg-background/60 px-5 py-4 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-accent/30 transition`} />
                 ))}
-                <input required type="time" className="col-span-2 rounded-2xl border border-border bg-background/60 px-5 py-4 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-accent/30 transition" />
-                <textarea placeholder="Special requests (optional)" rows={3}
+                <input required name="time" type="time" className="col-span-2 rounded-2xl border border-border bg-background/60 px-5 py-4 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-accent/30 transition" />
+                <textarea name="note" placeholder="Special requests (optional)" rows={3}
                   className="col-span-2 rounded-2xl border border-border bg-background/60 px-5 py-4 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-accent/30 transition resize-none" />
                 <button type="submit" className="col-span-2 inline-flex items-center justify-center gap-2 rounded-full bg-foreground text-background py-4 text-sm font-medium magnetic-btn">
                   {booked ? "Reserved · We'll be in touch ✓" : "Confirm reservation"}

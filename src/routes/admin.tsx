@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Lock, LogOut, ArrowLeft, ShoppingBag, DollarSign, Clock, Trash2 } from "lucide-react";
-import { ADMIN_EMAIL, ADMIN_PASSWORD, isAdminLoggedIn, setAdminLoggedIn, useOrders, type Order } from "@/lib/store";
+import { Lock, LogOut, ArrowLeft, ShoppingBag, DollarSign, Clock, Trash2, CalendarDays } from "lucide-react";
+import { ADMIN_EMAIL, ADMIN_PASSWORD, isAdminLoggedIn, setAdminLoggedIn, useOrders, useReservations, type Order, type Reservation } from "@/lib/store";
 
 export const Route = createFileRoute("/admin")({
   component: AdminPortal,
@@ -19,6 +19,7 @@ export const Route = createFileRoute("/admin")({
 });
 
 const STATUSES: Order["status"][] = ["new", "preparing", "delivered", "cancelled"];
+const RES_STATUSES: Reservation["status"][] = ["new", "confirmed", "seated", "cancelled"];
 
 function AdminPortal() {
   const [authed, setAuthed] = useState(false);
@@ -27,6 +28,7 @@ function AdminPortal() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const { orders, setStatus, removeOrder } = useOrders();
+  const { reservations, setReservationStatus, removeReservation } = useReservations();
 
   useEffect(() => { setAuthed(isAdminLoggedIn()); setReady(true); }, []);
 
@@ -94,6 +96,40 @@ function AdminPortal() {
             </div>
           ))}
         </div>
+
+        <h2 className="mt-10 font-display text-2xl">Table bookings</h2>
+        {reservations.length === 0 ? (
+          <p className="mt-4 text-sm text-muted-foreground">No table bookings yet. Reservations from the website appear here instantly.</p>
+        ) : (
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            {reservations.map((r) => (
+              <article key={r.id} className="glass rounded-3xl p-5">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="font-display text-xl">{r.name}</div>
+                    <div className="text-xs text-muted-foreground">{r.id} · {new Date(r.createdAt).toLocaleString()}</div>
+                  </div>
+                  <button onClick={() => removeReservation(r.id)} aria-label="Delete booking" className="text-muted-foreground hover:text-accent">
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+                <div className="mt-3 space-y-1 text-sm">
+                  <div className="flex items-center gap-2"><CalendarDays className="h-3.5 w-3.5 text-accent" /> {r.date} · {r.time} · {r.guests} guests</div>
+                  <div className="text-muted-foreground">{r.phone} · {r.email}</div>
+                  {r.note && <div className="text-muted-foreground">Note: {r.note}</div>}
+                </div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {RES_STATUSES.map((s) => (
+                    <button key={s} onClick={() => setReservationStatus(r.id, s)}
+                      className={`rounded-full px-4 py-1.5 text-xs capitalize transition ${r.status === s ? "bg-foreground text-background" : "border border-border"}`}>
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
 
         <h2 className="mt-10 font-display text-2xl">Orders</h2>
         {orders.length === 0 ? (
